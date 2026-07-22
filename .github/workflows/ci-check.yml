@@ -1,4 +1,4 @@
-name: apk debug
+name: CI Check
 
 on:
   push:
@@ -16,8 +16,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-debug-apk:
-    name: Build Debug APK
+  ci-verification:
+    name: Run CI Verification & Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -63,37 +63,10 @@ jobs:
             fi
           fi
 
-      - name: Compile Kotlin & Debug Sources
+      - name: Run Code Verification & Unit Tests
         run: |
           if [ -f gradlew ]; then
-            ./gradlew compileDebugSources --stacktrace
+            ./gradlew compileDebugSources testDebugUnitTest --stacktrace
           else
-            gradle compileDebugSources --stacktrace
+            gradle compileDebugSources testDebugUnitTest --stacktrace
           fi
-
-      - name: Package & Assemble Debug APK
-        run: |
-          if [ -f gradlew ]; then
-            ./gradlew assembleDebug --stacktrace
-          else
-            gradle assembleDebug --stacktrace
-          fi
-
-      - name: Verify APK Artifact Generation
-        run: |
-          if [ -f app/build/outputs/apk/debug/app-debug.apk ]; then
-            echo "APK generated successfully!"
-            ls -lh app/build/outputs/apk/debug/app-debug.apk
-          else
-            echo "Error: app-debug.apk not found!"
-            exit 1
-          fi
-
-      - name: Upload Debug APK Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: spotlocal-debug-apk
-          path: app/build/outputs/apk/debug/app-debug.apk
-          retention-days: 7
-          if-no-files-found: error
-

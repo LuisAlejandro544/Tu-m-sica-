@@ -10,7 +10,9 @@ Este documento detalla la arquitectura de carpetas, capas de código y responsab
 SpotLocal/
 ├── .github/
 │   └── workflows/
-│       └── apk-debug.yml                         # Workflow GitHub Action "apk debug" para generar APK Debug
+│       ├── apk-debug.yml                         # Workflow GitHub Action "apk debug" para generar APK Debug
+│       └── ci-check.yml                          # Workflow GitHub Action "CI Check" para validación CI y tests unitarios
+├── LICENSE                                       # Licencia de Código Visible pero No Comercial PolyForm Noncommercial 1.0.0
 ├── app/
 │   ├── src/
 │   │   ├── main/

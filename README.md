@@ -39,9 +39,10 @@ SpotLocal es una aplicación Android nativa diseñada para reproducir música lo
   - Botón flotante de depuración integrado únicamente en compilaciones Debug (`BuildConfig.DEBUG`).
   - Registro categorizado en tiempo real de **Acciones del usuario**, **Warnings/Advertencias** y **Crashes/Errores** con stack traces completos expuestos.
   - Interceptor global de excepciones no capturadas para reportar fallos y copia directa al portapapeles.
-- 🤖 **CI/CD con GitHub Action (`apk debug`)**:
-  - Flujo automatizado en `.github/workflows/apk-debug.yml` llamado `apk debug`.
-  - Compila y firma automáticamente el APK de depuración con la clave de depuración estándar y genera el artefacto listo para probar en dispositivos físicos sin exponer contraseñas ni claves en el repositorio.
+- 🤖 **CI/CD con GitHub Actions (`apk debug` y `CI Check`)**:
+  - Workflows automatizados en `.github/workflows/apk-debug.yml` y `.github/workflows/ci-check.yml` con filtro inteligente de archivos (`paths-ignore` para `.md` y archivos de documentación) para evitar builds innecesarios.
+  - **`apk debug`**: Compila y firma automáticamente el APK de depuración con la clave de depuración estándar y genera el artefacto listo para instalar.
+  - **`CI Check`**: Ejecuta la compilación de código y la suite de pruebas unitarias para garantizar que los cambios no rompan la aplicación.
 - 🐍 **IA Separación de Stems con Python & ONNX**:
   - Modelo neuronal liviano (<5MB) entrenado en Python y optimizado para ONNX Runtime Mobile.
   - Permite separar pistas en **Original, Solo Voces, Solo Instrumental y Modo Karaoke** en tiempo real.
@@ -93,8 +94,8 @@ SpotLocal está construido bajo una arquitectura híbrida de alto rendimiento:
    - Módulo en `rust_core/` enfocado en **parsing seguro de metadatos de audio (ID3, FLAC, OGG, WAV)** que elimina vulnerabilidades de memoria comunes en parsers en C tradicionales.
 4. **Python (AI Stems Engine / ONNX Export)**:
    - Módulo en `python_ai/` con scripts de exportación, cuantización INT8 y ejecución de modelos Mobile-U-Net para separación de fuentes de audio (Voces vs Acompañamiento / Karaoke).
-5. **GitHub Actions (CI/CD Workflow `apk debug`)**:
-   - Workflow en `.github/workflows/apk-debug.yml` para compilar el APK Debug automáticamente en la nube y subirlo como artefacto ejecutable.
+5. **GitHub Actions (CI/CD Workflows `apk debug` y `CI Check`)**:
+   - Workflows en `.github/workflows/apk-debug.yml` y `.github/workflows/ci-check.yml` para ensamblar el APK Debug y ejecutar verificaciones CI automáticas con filtros de ruta (`paths-ignore`).
 
 ---
 
@@ -111,4 +112,13 @@ SpotLocal está construido bajo una arquitectura híbrida de alto rendimiento:
 
 ## 📄 Licencia
 
-Este proyecto se distribuye bajo la licencia MIT.
+Este proyecto utiliza la licencia **PolyForm Noncommercial License 1.0.0** (Código Visible pero No Comercial).
+Permite visualizar, estudiar y ejecutar el código para uso privado y personal no comercial. Queda estrictamente prohibida su explotación comercial, redistribución lucrativa o venta sin autorización expresa del autor.
+
+---
+
+## 🤝 Contribuciones y Pull Requests
+
+**Este proyecto es un repositorio personal cerrado a contribuciones externas.**
+No se aceptan Pull Requests, propuestas de código ni contribuciones de terceros. El repositorio se mantiene público únicamente como demostración, uso personal y auditoría de código visible.
+

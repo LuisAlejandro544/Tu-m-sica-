@@ -14,7 +14,7 @@ Este archivo actúa como la guía oficial para cualquier inteligencia artificial
    - **C++ (Oboe / NDK)**: Lenguaje para el motor de audio nativo de baja latencia, cálculo Biquad de coeficientes de ecualización de 5 bandas y algoritmos DSP (Pitch shift, Time stretch).
    - **Rust (Cargo Core / JNI)**: Lenguaje activo para **parsing ultra-seguro de metadatos (ID3, FLAC, OGG, WAV)** y cálculo de curva de respuesta en frecuencia para el ecualizador visual.
    - **Python (AI Stems Engine / ONNX Export)**: Lenguaje oficial para la creación, cuantización (INT8) y prueba de modelos ligeros (<5MB) de **separación de voz e instrumental (Stems)** compatibles con ONNX Runtime en Android.
-   - **GitHub Actions (CI/CD)**: Workflow `apk debug` en `.github/workflows/apk-debug.yml` para compilar y firmar automáticamente el APK Debug listo para instalar en dispositivos reales.
+   - **GitHub Actions (CI/CD)**: Workflows `.github/workflows/apk-debug.yml` (ensamblado de APK) y `.github/workflows/ci-check.yml` (verificación CI y pruebas unitarias) optimizados con filtros de ruta (`paths-ignore` para `.md`).
 
 3. **Principios de Diseño e Interfaz**:
    - Tema oscuro inspirado en Spotify: Fondo base `#121212`, tarjetas `#282828` / `#181818`, verde acento `#1DB954`.
@@ -44,8 +44,12 @@ Este archivo actúa como la guía oficial para cualquier inteligencia artificial
 - La reproducción continua y la notificación interactiva de sistema en pantalla de bloqueo se sincroniza con `MediaNotificationManager` y `MusicPlaybackService` (`MediaStyle` + `MediaSessionCompat`).
 - El soporte para "Abrir con..." desde exploradores de archivos externos se procesa mediante `handleIncomingAudioIntent(intent)` en `MainActivity`.
 
-### En CI/CD y Workflows GitHub:
-- El workflow de GitHub Actions debe llamarse exactamente `apk debug` (`.github/workflows/apk-debug.yml`) y generar el APK Debug firmado por defecto.
+### En CI/CD, Licenciamiento y Workflows GitHub:
+- Licencia asignada: **PolyForm Noncommercial License 1.0.0** en el archivo `/LICENSE` (Código Visible pero No Comercial para proteger la propiedad intelectual del repositorio público).
+- Política de contribución: Repositorio personal cerrado. No se aceptan Pull Requests ni contribuciones de código de terceros.
+- El workflow `.github/workflows/apk-debug.yml` genera el APK Debug firmado por defecto.
+- El workflow `.github/workflows/ci-check.yml` ejecuta la compilación de fuentes y las pruebas unitarias.
+- Todos los workflows incluyen `paths-ignore` para omitir la ejecución cuando los cambios corresponden exclusivamente a documentación o archivos `.md`.
 
 ### En Código C++ / JNI:
 - Las llamadas nativas C++ deben gestionarse a través del paquete `com.example.player`.

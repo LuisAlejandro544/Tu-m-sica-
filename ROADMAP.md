@@ -14,7 +14,13 @@ Este documento detalla la hoja de ruta y planificación futura para la evolució
 - [x] **Barra de Volumen Flotante Personalizada estilo Spotify**:
   - Panel HUD `CustomVolumePanelHUD` en Jetpack Compose con animación slide/fade, slider táctil con nivelador de ondas, indicador de porcentaje y accesos directos de volumen.
   - Controlador `VolumeController` que intercepta los botones de volumen del hardware en `MainActivity` y sincroniza en tiempo real con `AudioManager`.
-- [x] **CI/CD GitHub Action `apk debug`**: Workflow en `.github/workflows/apk-debug.yml` que compila y firma automáticamente el APK Debug en la nube.
+- [x] **CI/CD GitHub Actions (`apk debug` y `CI Check`)**:
+  - Workflow en `.github/workflows/apk-debug.yml` para compilar y firmar el APK Debug.
+  - Workflow en `.github/workflows/ci-check.yml` para ejecutar verificación CI de compilación y pruebas unitarias.
+  - Optimización con filtro de rutas (`paths-ignore` para `.md` y documentación) evitando ejecuciones innecesarias.
+- [x] **Licencia de Código Visible pero No Comercial (`PolyForm Noncommercial 1.0.0`) y Repositorio Cerrado**:
+  - Archivo `LICENSE` integrado para proteger la propiedad intelectual permitiendo la auditoría pública de código sin autorización comercial.
+  - Especificación clara de **no aceptación de Pull Requests ni contribuciones externas**.
 - [x] **Consola de Logs & Capturador de Crashes Debug**: Interceptor en vivo de acciones, warnings y excepciones con stack trace dentro de la app (solo activo en compilación Debug).
 - [x] **Estructura Organizativa de Almacenamiento**: Subcarpetas `music/`, `images/` y `json/` en el directorio de la aplicación.
 - [x] **Navegación e Pantallas Independientes de Playlist**:
