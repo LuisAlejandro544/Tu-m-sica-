@@ -1,0 +1,91 @@
+name: apk debug
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build-debug-apk:
+    name: Build Debug APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Cache Gradle packages and wrapper
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Grant execute permission for gradlew
+        run: |
+          if [ -f gradlew ]; then
+            chmod +x gradlew
+            echo "gradlew permissions updated successfully."
+          else
+            echo "No gradlew file found, fallback to system gradle."
+          fi
+
+      - name: Generate Debug Keystore if missing
+        run: |
+          if [ ! -f debug.keystore ]; then
+            if [ -f debug.keystore.base64 ]; then
+              base64 -d debug.keystore.base64 > debug.keystore
+              echo "Restored debug.keystore from base64."
+            else
+              echo "Generating fresh debug.keystore on the fly using keytool..."
+              keytool -genkeypair -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug, O=Android, C=US"
+              echo "debug.keystore generated successfully."
+            fi
+          fi
+
+      - name: Compile Kotlin & Debug Sources
+        run: |
+          if [ -f gradlew ]; then
+            ./gradlew compileDebugSources --stacktrace
+          else
+            gradle compileDebugSources --stacktrace
+          fi
+
+      - name: Package & Assemble Debug APK
+        run: |
+          if [ -f gradlew ]; then
+            ./gradlew assembleDebug --stacktrace
+          else
+            gradle assembleDebug --stacktrace
+          fi
+
+      - name: Verify APK Artifact Generation
+        run: |
+          if [ -f app/build/outputs/apk/debug/app-debug.apk ]; then
+            echo "APK generated successfully!"
+            ls -lh app/build/outputs/apk/debug/app-debug.apk
+          else
+            echo "Error: app-debug.apk not found!"
+            exit 1
+          fi
+
+      - name: Upload Debug APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: spotlocal-debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 7
+          if-no-files-found: error
+

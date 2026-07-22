@@ -1,0 +1,6 @@
+{
+  "name": "SpotLocal",
+  "description": "Reproductor de música local con importación manual para evitar archivos de audio basura, estilo Spotify.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
